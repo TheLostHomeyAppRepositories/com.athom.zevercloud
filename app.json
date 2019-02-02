@@ -346,11 +346,7 @@
             }
           ]
         }
-      ],
-      "images": {
-        "large": "/drivers/plant/assets/images/large.png",
-        "small": "/drivers/plant/assets/images/small.png"
-      }
+      ]
     }
   ]
 }
