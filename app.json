@@ -22,7 +22,7 @@
   "permissions": [],
   "images": {
     "large": "/assets/images/solar-panels.jpg",
-    "small": "/assets/images/solar-panels-small.png"
+    "small": "/assets/images/solar-panels-small.jpg"
   },
   "author": {
     "name": "Edwin Biemond",
@@ -349,7 +349,7 @@
       ],
       "images": {
         "large": "/drivers/plant/assets/images/solar-panels.jpg",
-        "small": "/drivers/plant/assets/images/solar-panels-small.png"
+        "small": "/drivers/plant/assets/images/solar-panels-small.jpg"
       }
     }
   ]
