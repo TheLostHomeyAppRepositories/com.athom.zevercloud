@@ -346,7 +346,11 @@
             }
           ]
         }
-      ]
+      ],
+      "images": {
+        "large": "/drivers/plant/assets/images/solar-panels.jpg",
+        "small": "/drivers/plant/assets/images/solar-panels-small.png"
+      }
     }
   ]
 }
