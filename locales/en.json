@@ -1,0 +1,12 @@
+{
+	"pair": {
+		"start": {
+			"title": "Setup SeverCloud",
+			"intro": "Enter the api key of the plant",
+			"error": "An error has occurred.",
+			"required": "Api key is a required value.",
+			"apikey": "ZeverCloud API key",
+			"saveSettings": "Save settings"
+		}
+  }
+}
