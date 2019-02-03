@@ -151,6 +151,14 @@ class plant extends Homey.Device {
             var ludtdate = data.ludt; 
             this.log("update date "+ ludtdate);
             this.setCapabilityValue('latest_upload_date', ludtdate);
+            this.setCapabilityValue('measure_power-current', data.Power.value);
+
+            var val = data["E-Today"].value
+            this.setCapabilityValue('measure_e-total-today', val);
+            var val2 = data["E-Month"].value
+            this.setCapabilityValue('measure_e-total-month', val2);
+            var val3 = data["E-Total"].value
+            this.setCapabilityValue('measure_e-total', val3);
 
             let tokens = {
                 "power": data.Power.value,
@@ -170,21 +178,13 @@ class plant extends Homey.Device {
                 this.triggerPowerAbove1000WFlow(tokens);
             }
 
-            if (this.getCapabilityValue('measure_power-current') > 0 && data.Power.value == 0 ) {
+            if (this.getCapabilityValue('measure_power-current') >= 25 && data.Power.value < 25 ) {
                 let tokens2 = {
                     "power": 0,
                     "plant": this.getData().id.toLowerCase()
                 };
                 this.triggerPowerIs0WFlow(tokens2);
             }
-            this.setCapabilityValue('measure_power-current', data.Power.value);
-
-            var val = data["E-Today"].value
-            this.setCapabilityValue('measure_e-total-today', val);
-            var val2 = data["E-Month"].value
-            this.setCapabilityValue('measure_e-total-month', val2);
-            var val3 = data["E-Total"].value
-            this.setCapabilityValue('measure_e-total', val3);
         })
         .catch(error => {
             this.log(error);
