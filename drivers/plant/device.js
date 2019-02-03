@@ -79,6 +79,21 @@ class plant extends Homey.Device {
             .catch(this.error)
     }
 
+    // flow triggers
+    triggerPowerAbove500WFlow(tokens) {
+        this._flowTriggerPowerAbove500W
+            .trigger(tokens)
+            .then(this.log("triggerPowerAbove500WFlow"))
+            .catch(this.error)
+    }
+    // flow triggers
+    triggerPowerAbove1000WFlow(tokens) {
+        this._flowTriggerPowerAbove1000W
+            .trigger(tokens)
+            .then(this.log("triggerPowerAbove1000WFlow"))
+            .catch(this.error)
+    }
+
     triggerPowerIs0WFlow(tokens) {
         this._flowTriggerPowerIs0W
             .trigger(tokens)

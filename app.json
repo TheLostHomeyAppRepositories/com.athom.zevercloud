@@ -1,6 +1,6 @@
 {
   "id": "com.athom.zevercloud",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "compatibility": ">=1.5.0",
   "sdk": 2,
   "name": {
@@ -163,7 +163,7 @@
       {
 				"id": "PowerAbove1000W",
 				"title": {
-					"en": "When generated power by the plant is above 1-00W"
+					"en": "When generated power by the plant is above 1000W"
 				},
 				"hint": {
 					"en": "Triggers when the plant generated power is above 1000W"
