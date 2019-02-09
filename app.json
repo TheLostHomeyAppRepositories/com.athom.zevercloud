@@ -1,6 +1,6 @@
 {
   "id": "com.athom.zevercloud",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "compatibility": ">=1.5.0",
   "sdk": 2,
   "name": {
@@ -41,7 +41,8 @@
       },
       "min": 0,
       "max": 20000,
-      "icon": "/assets/images/power.svg"      
+			"icon": "/assets/images/power.svg",
+			"insights": true      
     },
     "measure_e-total-today": {
       "type": "number",
@@ -56,7 +57,8 @@
       "min": 0,
       "max": 100,
       "decimals": 2,
-      "icon": "/assets/images/etoday.svg"
+			"icon": "/assets/images/etoday.svg",
+			"insights": true
     },
     "measure_e-total-month": {
       "type": "number",
@@ -71,7 +73,7 @@
       "min": 0,
       "max": 2000,
       "decimals": 2,
-      "icon": "/assets/images/etoday.svg"
+			"icon": "/assets/images/etoday.svg"
     },
     "measure_e-total": {
       "type": "number",
@@ -95,7 +97,7 @@
       },
       "getable": true,
       "setable": false,
-      "icon": "/assets/images/clock.svg"
+			"icon": "/assets/images/clock.svg"
     }        
   },
 	"flow": {
