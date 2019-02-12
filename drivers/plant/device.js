@@ -151,7 +151,15 @@ class plant extends Homey.Device {
             var ludtdate = data.ludt; 
             this.log("update date "+ ludtdate);
             this.setCapabilityValue('latest_upload_date', ludtdate);
-            this.setCapabilityValue('measure_power-current', data.Power.value);
+
+            var power = 0
+            if ( data.Power.unit == "kW" ) {
+                power =  (data.Power.value * 1000);
+            } else {
+                power =  data.Power.value;
+            }
+
+            this.setCapabilityValue('measure_power-current', power);
 
             var val = data["E-Today"].value
             this.setCapabilityValue('measure_e-total-today', val);
@@ -161,24 +169,24 @@ class plant extends Homey.Device {
             this.setCapabilityValue('measure_e-total', val3);
 
             let tokens = {
-                "power": data.Power.value,
+                "power": power,
                 "plant": this.getData().id.toLowerCase()
             };
 
             if ( this.getCapabilityValue('measure_power-current') < 100 
-                 && data.Power.value > 100 
-                 && data.Power.value < 500 ) {
+                 && power > 100 
+                 && power < 500 ) {
                 this.triggerPowerAbove100WFlow(tokens);
             } else if ( this.getCapabilityValue('measure_power-current') < 500 
-                        && data.Power.value > 500 
-                        && data.Power.value < 1000 ) {
+                        && power > 500 
+                        && power < 1000 ) {
                 this.triggerPowerAbove500WFlow(tokens);
             } else if ( this.getCapabilityValue('measure_power-current') < 1000 
-                        && data.Power.value > 1000 ) {
+                        && power > 1000 ) {
                 this.triggerPowerAbove1000WFlow(tokens);
             }
 
-            if (this.getCapabilityValue('measure_power-current') >= 25 && data.Power.value < 25 ) {
+            if (this.getCapabilityValue('measure_power-current') >= 25 && power < 25 ) {
                 let tokens2 = {
                     "power": 0,
                     "plant": this.getData().id.toLowerCase()
