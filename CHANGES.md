@@ -1,5 +1,7 @@
 # zevercloud app
 
+## 0.0.6
+
 ## 0.0.5
 
 - adjust e-total,e-month when unit = MWh
