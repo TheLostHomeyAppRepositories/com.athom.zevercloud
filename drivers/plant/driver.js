@@ -10,14 +10,17 @@ class plantDriver extends Homey.Driver {
 	}
 
 	onPair(socket) {
-		var plantId = Math.random().toString(36).substr(2,5);
-		this.log('Plant id ' + plantId);
-		
+		var plantId = "dummy";
+		// dummy
         let devices = [
             {
-                "name": "ZeverSolar Plant",
-                "data": { "id": "abcd" , "apikey": "..." },
+                "name": "zeversolar_plant_" + plantId,
+                "data": { 
+                    "id": plantId, 
+                    "apikey": "..." 
+                },
                 "settings": {
+                    "id": plantId,
                     "apikey": "APIKey"
                 }
             }
