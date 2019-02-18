@@ -159,14 +159,26 @@ class plant extends Homey.Device {
                 power =  data.Power.value;
             }
 
+            var etotal = 0
+            if ( data["E-Total"].unit == "MWh" ) {
+                etotal =  (data["E-Total"].value * 1000);
+            } else {
+                etotal =  data["E-Total"].value;
+            }
+
+            var etotalMonth = 0
+            if ( data["E-Month"].unit == "MWh" ) {
+                etotalMonth =  (data["E-Month"].value * 1000);
+            } else {
+                etotalMonth =  data["E-Month"].value;
+            }
+
             this.setCapabilityValue('measure_power-current', power);
 
             var val = data["E-Today"].value
             this.setCapabilityValue('measure_e-total-today', val);
-            var val2 = data["E-Month"].value
-            this.setCapabilityValue('measure_e-total-month', val2);
-            var val3 = data["E-Total"].value
-            this.setCapabilityValue('measure_e-total', val3);
+            this.setCapabilityValue('measure_e-total-month', etotalMonth);
+            this.setCapabilityValue('measure_e-total', etotal);
 
             let tokens = {
                 "power": power,
