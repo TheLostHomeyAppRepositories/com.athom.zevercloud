@@ -40,11 +40,11 @@ class plant extends Homey.Device {
         this._flowTriggerPowerAbove1000W = new Homey.FlowCardTrigger('PowerAbove1000W').register();
         this._flowTriggerPowerIs0W = new Homey.FlowCardTrigger('PowerIs0W').register();
         this._conditionIsGenerating = new Homey.FlowCardCondition('is_generating').register().registerRunListener((args, state) => {
-                var result = (this.getCapabilityValue('measure_power-current') > 0 ) 
+                var result = (this.getCapabilityValue('measure_power') > 0 ) 
                 return Promise.resolve(result);
         });        
         this._conditionGeneratingOutput = new Homey.FlowCardCondition('generating_output').register().registerRunListener((args, state) => {
-            var result = (this.conditionIsGeneratingToString(this.getCapabilityValue('measure_power-current')) == args.argument_main) 
+            var result = (this.conditionIsGeneratingToString(this.getCapabilityValue('measure_power')) == args.argument_main) 
             return Promise.resolve(result);
         });
         this.pollSeverCloud(settings);
@@ -177,7 +177,7 @@ class plant extends Homey.Device {
                 etotalMonth =  data["E-Month"].value;
             }
 
-            this.setCapabilityValue('measure_power-current', power);
+            this.setCapabilityValue('measure_power', power);
 
             var val = data["E-Today"].value
             this.setCapabilityValue('measure_e-total-today', val);
@@ -189,20 +189,20 @@ class plant extends Homey.Device {
                 "plant": this.getData().id.toLowerCase()
             };
 
-            if ( this.getCapabilityValue('measure_power-current') < 100 
+            if ( this.getCapabilityValue('measure_power') < 100 
                  && power > 100 
                  && power < 500 ) {
                 this.triggerPowerAbove100WFlow(tokens);
-            } else if ( this.getCapabilityValue('measure_power-current') < 500 
+            } else if ( this.getCapabilityValue('measure_power') < 500 
                         && power > 500 
                         && power < 1000 ) {
                 this.triggerPowerAbove500WFlow(tokens);
-            } else if ( this.getCapabilityValue('measure_power-current') < 1000 
+            } else if ( this.getCapabilityValue('measure_power') < 1000 
                         && power > 1000 ) {
                 this.triggerPowerAbove1000WFlow(tokens);
             }
 
-            if (this.getCapabilityValue('measure_power-current') >= 25 && power < 25 ) {
+            if (this.getCapabilityValue('measure_power') >= 25 && power < 25 ) {
                 let tokens2 = {
                     "power": 0,
                     "plant": this.getData().id.toLowerCase()

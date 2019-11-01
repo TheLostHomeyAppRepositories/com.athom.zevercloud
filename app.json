@@ -1,14 +1,14 @@
 {
-  "id": "com.athom.zevercloud",
-  "version": "0.0.6",
-  "compatibility": ">=1.5.0",
-  "sdk": 2,
-  "name": {
-    "en": "ZeverCloud Solar Power"
-  },
-  "description": {
-    "en": "Read solar output from zeversolar/zervercloud"
-  },
+	"id": "com.athom.zevercloud",
+	"version": "0.0.7",
+	"compatibility": ">=1.5.0",
+	"sdk": 2,
+	"name": {
+		"en": "ZeverCloud Solar Power"
+	},
+	"description": {
+		"en": "Read solar output from zeversolar/zervercloud"
+	},
 	"tags": {
 		"en": [
 			"solar",
@@ -16,93 +16,93 @@
 			"sun"
 		]
 	},
-  "category": [
-    "energy"
-  ],
-  "permissions": [],
-  "images": {
-    "large": "/assets/images/solar-panels.jpg",
-    "small": "/assets/images/solar-panels-small.jpg"
-  },
-  "author": {
-    "name": "Edwin Biemond",
-    "email": "biemond@gmail.com"
-  },
-  "capabilities": {
-    "measure_power-current": {
-      "type": "number",
-      "title": {
-        "en": "Current Power"
-      },
-      "getable": true,
-      "setable": false,
-      "units": {
-        "en": "W"
-      },
-      "min": 0,
-      "max": 20000,
+	"category": [
+		"energy"
+	],
+	"permissions": [],
+	"images": {
+		"large": "/assets/images/solar-panels.jpg",
+		"small": "/assets/images/solar-panels-small.jpg"
+	},
+	"author": {
+		"name": "Edwin Biemond",
+		"email": "biemond@gmail.com"
+	},
+	"capabilities": {
+		"measure_power": {
+			"type": "number",
+			"title": {
+				"en": "Current Power"
+			},
+			"getable": true,
+			"setable": false,
+			"units": {
+				"en": "W"
+			},
+			"min": 0,
+			"max": 20000,
 			"icon": "/assets/images/power.svg",
-			"insights": true      
-    },
-    "measure_e-total-today": {
-      "type": "number",
-      "title": {
-        "en": "E-Today"
-      },
-      "getable": true,
-      "setable": false,
-      "units": {
-        "en": "kWh"
-      },
-      "min": 0,
-      "max": 100,
-      "decimals": 2,
+			"insights": true
+		},
+		"measure_e-total-today": {
+			"type": "number",
+			"title": {
+				"en": "E-Today"
+			},
+			"getable": true,
+			"setable": false,
+			"units": {
+				"en": "kWh"
+			},
+			"min": 0,
+			"max": 100,
+			"decimals": 2,
 			"icon": "/assets/images/etoday.svg",
 			"insights": true
-    },
-    "measure_e-total-month": {
-      "type": "number",
-      "title": {
-        "en": "E-Month"
-      },
-      "getable": true,
-      "setable": false,
-      "units": {
-        "en": "kWh"
-      },
-      "min": 0,
-      "max": 2000,
-      "decimals": 2,
+		},
+		"measure_e-total-month": {
+			"type": "number",
+			"title": {
+				"en": "E-Month"
+			},
+			"getable": true,
+			"setable": false,
+			"units": {
+				"en": "kWh"
+			},
+			"min": 0,
+			"max": 2000,
+			"decimals": 2,
 			"icon": "/assets/images/etoday.svg"
-    },
-    "measure_e-total": {
-      "type": "number",
-      "title": {
-        "en": "E-total"
-      },
-      "getable": true,
-      "setable": false,
-      "units": {
-        "en": "kWh"
-      },
-      "min": 0,
-      "max": 100000,
-      "decimals": 2,
-      "icon": "/assets/images/etoday.svg"
-    },
-    "latest_upload_date": {
-      "type": "string",
-      "title": {
-        "en": "Latest update date"
-      },
-      "getable": true,
-      "setable": false,
+		},
+		"measure_e-total": {
+			"type": "number",
+			"title": {
+				"en": "E-total"
+			},
+			"getable": true,
+			"setable": false,
+			"units": {
+				"en": "kWh"
+			},
+			"min": 0,
+			"max": 100000,
+			"decimals": 2,
+			"icon": "/assets/images/etoday.svg"
+		},
+		"latest_upload_date": {
+			"type": "string",
+			"title": {
+				"en": "Latest update date"
+			},
+			"getable": true,
+			"setable": false,
 			"icon": "/assets/images/clock.svg"
-    }        
-  },
+		}
+	},
 	"flow": {
 		"triggers": [
-      {
+			{
 				"id": "PowerAbove100W",
 				"title": {
 					"en": "When generated power by the plant is above 100W"
@@ -110,7 +110,8 @@
 				"hint": {
 					"en": "Triggers when the plant generated power is above 100W"
 				},
-				"tokens": [{
+				"tokens": [
+					{
 						"name": "power",
 						"type": "number",
 						"title": {
@@ -131,8 +132,8 @@
 						}
 					}
 				]
-      },
-      {
+			},
+			{
 				"id": "PowerAbove500W",
 				"title": {
 					"en": "When generated power by the plant is above 500W"
@@ -140,7 +141,8 @@
 				"hint": {
 					"en": "Triggers when the plant generated power is above 500W"
 				},
-				"tokens": [{
+				"tokens": [
+					{
 						"name": "power",
 						"type": "number",
 						"title": {
@@ -161,8 +163,8 @@
 						}
 					}
 				]
-      },
-      {
+			},
+			{
 				"id": "PowerAbove1000W",
 				"title": {
 					"en": "When generated power by the plant is above 1000W"
@@ -170,7 +172,8 @@
 				"hint": {
 					"en": "Triggers when the plant generated power is above 1000W"
 				},
-				"tokens": [{
+				"tokens": [
+					{
 						"name": "power",
 						"type": "number",
 						"title": {
@@ -191,8 +194,8 @@
 						}
 					}
 				]
-      },
-      {
+			},
+			{
 				"id": "PowerIs0W",
 				"title": {
 					"en": "No power is generated by the plant"
@@ -200,7 +203,8 @@
 				"hint": {
 					"en": "Triggers when there is no power generated by the plant"
 				},
-				"tokens": [{
+				"tokens": [
+					{
 						"name": "power",
 						"type": "number",
 						"title": {
@@ -221,10 +225,10 @@
 						}
 					}
 				]
-      }
-      ],
-      "conditions": [
-      {
+			}
+		],
+		"conditions": [
+			{
 				"id": "is_generating",
 				"title": {
 					"en": "It !{{is|isn't}} generating power:"
@@ -232,13 +236,15 @@
 				"hint": {
 					"en": "Are we generating or not"
 				},
-				"args": [{
-          "name": "device",
-          "type": "device",
-          "filter": "driver_id=plant"
-        }]
-      },
-      {
+				"args": [
+					{
+						"name": "device",
+						"type": "device",
+						"filter": "driver_id=plant"
+					}
+				]
+			},
+			{
 				"id": "generating_output",
 				"title": {
 					"en": "level of generating power:"
@@ -246,16 +252,17 @@
 				"hint": {
 					"en": "Description of the power output."
 				},
-				"args": [{
+				"args": [
+					{
 						"name": "device",
-            "type": "device",
-            "filter": "driver_id=plant"
+						"type": "device",
+						"filter": "driver_id=plant"
 					},
 					{
 						"name": "argument_main",
 						"type": "dropdown",
 						"values": [
-              {
+							{
 								"id": "minimal",
 								"label": {
 									"en": "minimal, under 100W"
@@ -303,56 +310,60 @@
 									"en": "above 4000W"
 								}
 							}
-            ]
+						]
 					}
 				]
-      } 
-    ]  
-  },  
-  "drivers": [
-    {
-      "id": "plant",
-      "name": {
-        "en": "plant"
-      },
-      "class": "sensor",
-      "capabilities": [
-        "measure_power-current",
-        "measure_e-total-today",
-        "measure_e-total-month",
-        "measure_e-total",
-        "latest_upload_date"
-      ],
-			"capabilitiesOptions": {
+			}
+		]
+	},
+	"drivers": [
+		{
+			"id": "plant",
+			"name": {
+				"en": "plant"
 			},
-			"pair": [{
-				"id": "pair"
-			}],
-      "settings":[
-        {
-          "type": "group",
-          "label": {
-            "en": "General settings"
-          },
-          "children":[
-            {
-              "id": "apikey",
-              "type": "text",
-              "label": {
-                "en": "ZeverCloud API key"
-              },
-              "value": "...",
-              "hint": {
-                "en": "Enter the API key of your ZeverSolar plant here."
-              }
-            }
-          ]
-        }
-      ],
-      "images": {
-        "large": "/drivers/plant/assets/images/solar-panels.jpg",
-        "small": "/drivers/plant/assets/images/solar-panels-small.jpg"
-      }
-    }
-  ]
+			"class": "solarpanel",
+			"capabilities": [
+				"measure_power",
+				"measure_e-total-today",
+				"measure_e-total-month",
+				"measure_e-total",
+				"latest_upload_date"
+			],
+			"energy": {
+				"cumulative": true
+			},
+			"capabilitiesOptions": {},
+			"pair": [
+				{
+					"id": "pair"
+				}
+			],
+			"settings": [
+				{
+					"type": "group",
+					"label": {
+						"en": "General settings"
+					},
+					"children": [
+						{
+							"id": "apikey",
+							"type": "text",
+							"label": {
+								"en": "ZeverCloud API key"
+							},
+							"value": "...",
+							"hint": {
+								"en": "Enter the API key of your ZeverSolar plant here."
+							}
+						}
+					]
+				}
+			],
+			"images": {
+				"large": "/drivers/plant/assets/images/solar-panels.jpg",
+				"small": "/drivers/plant/assets/images/solar-panels-small.jpg"
+			}
+		}
+	]
 }

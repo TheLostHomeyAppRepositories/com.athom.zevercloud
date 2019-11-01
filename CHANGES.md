@@ -1,5 +1,10 @@
 # zevercloud app
 
+## 0.0.7
+
+- Support generating power from homey 3.0
+- renaming measure_power-current to measure_power probably requires a reinstall of the device
+
 ## 0.0.6
 
 - fix double device and cron tasks on my side. wait for https://github.com/athombv/homey-apps-sdk-issues/issues/50
