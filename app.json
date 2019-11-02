@@ -331,7 +331,6 @@
 				"latest_upload_date"
 			],
 			"energy": {
-				"cumulative": true
 			},
 			"capabilitiesOptions": {},
 			"pair": [
