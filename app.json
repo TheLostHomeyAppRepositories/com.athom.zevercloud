@@ -1,6 +1,6 @@
 {
 	"id": "com.athom.zevercloud",
-	"version": "0.0.7",
+	"version": "0.0.8",
 	"compatibility": ">=1.5.0",
 	"sdk": 2,
 	"name": {
@@ -20,6 +20,11 @@
 		"energy"
 	],
 	"permissions": [],
+	"bugs": {
+		"url": "https://github.com/biemond/com.athom.zevercloud/issues"
+	},
+	"source": "https://github.com/biemond/com.athom.zevercloud",
+	"support": "mailto:biemond@gmail.com",
 	"images": {
 		"large": "/assets/images/solar-panels.jpg",
 		"small": "/assets/images/solar-panels-small.jpg"
