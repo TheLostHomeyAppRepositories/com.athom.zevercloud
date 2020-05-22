@@ -1,4 +1,7 @@
 {
+  "0.0.9": {
+    "en": "refactor some code"
+  } , 
   "0.0.8": {
     "en": "Support for generating power on the energy, had to rename measure_power-current to measure_power to support this, requires reinstall of your device so the values shows up again."
   }

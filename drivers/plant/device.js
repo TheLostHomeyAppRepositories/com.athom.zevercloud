@@ -1,6 +1,6 @@
 'use strict';
 
-const zevercloud = require('index.js');
+const zevercloud = require('../index.js');
 const Homey = require('homey');
 
 Date.prototype.timeNow = function(){ 
