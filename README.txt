@@ -1,5 +1,3 @@
-ZeverCloud Solar Power for Homey
-
 When you connect your ZeverSolar device to the ZeverCloud you can use this homey app for retrieving the 5 minute values of your solar panels and use this in your Homey home automation flows. Like charging your car or start your washing machine when there is enough solar power.
 
 Device
