@@ -6,6 +6,8 @@
 			"error": "An error has occurred.",
 			"required": "Api key is a required value.",
 			"apikey": "ZeverCloud API key",
+			"appkey": "ZeverCloud account App",
+			"secret": "ZeverCloud account secret",			
 			"saveSettings": "Save settings"
 		}
   }

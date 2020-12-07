@@ -22,6 +22,18 @@
       <input type="text" id="apikey" placeholder="..." value="" />
     </span>
     <br/>
+    <label for="secret"><span data-i18n="pair.start.secret"></span>
+    </label>
+    <span class="input-wrap">
+      <input type="text" id="secret" placeholder="..." value="" />
+    </span>
+    <br/>
+    <label for="appkey"><span data-i18n="pair.start.appkey"></span>
+    </label>
+    <span class="input-wrap">
+      <input type="text" id="appkey" placeholder="..." value="" />
+    </span>
+    <br/>
     <button class="button" id="validate"><span data-i18n="pair.start.saveSettings"></span>
     </button>
     <i class="solar-status solar-loading fa fa-circle-o-notch fa-spin">
@@ -42,9 +54,11 @@
               var plantId = Math.random().toString(36).substr(2,5).toLowerCase();
               var id = Math.round(Math.random() * (100000 - 10000) + 10000);
               var APIKey = document.getElementById('apikey').value;
+              var APPKey = document.getElementById('appkey').value;
+              var Secret = document.getElementById('secret').value;
 
               // APIkey is required
-              if (APIKey == "") {
+              if (APIKey == "" || APPKey == ""  || Secret == "") {
                   // Give error, required values
                   Homey.alert(__('pair.start.required'), 'error');
                   return;
@@ -54,8 +68,10 @@
               $('.solar-loading').addClass('visible');
               Homey.emit('validate', {
                   id: plantId,
-                  apikey: APIKey
-              }, function(err, result) {
+                  apikey: APIKey,
+                  appkey: APPKey,
+                  secret: Secret
+                }, function(err, result) {
                   $('.solar-status').removeClass('visible');
                   if (!err) {
                       $('.solar-ok').addClass('visible');
@@ -63,12 +79,16 @@
                       var device_data = {
                           data: {
                               id: plantId,
-                              apikey: APIKey
+                              apikey: APIKey,
+                              appkey: APPKey,
+                              secret: Secret
                           },
                           name: 'zeversolar_plant_' + plantId,
                           settings: {
                               id: plantId,
-                              apikey: APIKey
+                              apikey: APIKey,
+                              appkey: APPKey,
+                              secret: Secret
                           }
                       };
                       Homey.addDevice({

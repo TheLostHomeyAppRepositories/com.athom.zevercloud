@@ -6,6 +6,10 @@ When you connect your ZeverSolar device to the ZeverCloud you can use this homey
 
 Every ZeverSolar plant is a device which you can monitor in homey.
 
+### Requesting the app and secret key from zeversolar
+
+Mail to service.eu@zeversolar.net , the app & key fields are hidden fields on your zevercloud account
+
 ### Retrieving the api key of a plant
 
 When you go this page https://www.zevercloud.com/station/update and add step 5 you can get the api key of your plant. Use this api key as input for this app.

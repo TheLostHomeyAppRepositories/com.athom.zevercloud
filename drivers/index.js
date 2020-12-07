@@ -2,16 +2,8 @@
 (function () {
 
     // main settings
-    var http = require('http.min');
-    var options = {
-        protocol: 'https:',
-        hostname: 'www.zevercloud.com',
-        path: '/dummy',
-        headers: {
-            'User-Agent': 'Node.js http.min',
-            'Accept': 'application/json'
-        }
-    };
+    const crypto = require('crypto');
+    const https = require('http')
 
     var zevercloud = exports;
 
@@ -19,29 +11,75 @@
 
     zevercloud.getTodayData = function getTodayData(settings) {
         console.log("node_modules settings " +  JSON.stringify(settings));
-        let url = '/api/v1/getPlantOverview?key=' + settings["apikey"];
+        
+        var appSecret = settings["secret"]; 
+        const appKey  = settings["appkey"];
+        const apiKey  = settings["apikey"];
+        
+        const op = 'GET';
+        const accept = 'application/json';
+        const time = Date.now();
+        
+        const payload = op.concat('\n', accept,'\n\n\n',
+                              '\nX-Ca-Key:', appKey,
+                              '\nX-Ca-Timestamp:', time,
+                              '\n/getPlantOverview?key=', apiKey );
+        
+        console.log(payload);
+        
+        const signedHeaders = "X-Ca-Signature-Headers: X-Ca-Key,X-Ca-Timestamp"
+        
+        let signature = crypto.createHmac('sha256', appSecret).update(payload).digest("base64")
+        
+        console.log(signature);
+        
+        const options = {
+            protocol: 'http:',
+            method: 'GET',
+            headers: {
+                'X-Ca-Timestamp': time,
+                'Accept': accept,
+                'X-Ca-Key': appKey,
+                'X-Ca-Signature': signature,
+                'X-Ca-Signature-Headers': 'X-Ca-Key,X-Ca-Timestamp'
+            }
+        }
+        options.hostname = 'api.general.zevercloud.cn';
+        options.path = '/getPlantOverview?key='+ apiKey;
+
+        // let url = '/api/v1/getPlantOverview?key=' + settings["apikey"];
 
         return new Promise((resolve, reject) => {
-            getData(url, (error, jsonobj) => {
-                if (jsonobj) {
-                    resolve(jsonobj);
-                } else {
-                    reject(error);
-                }
-            });
+
+            const reqX = https.request(options, resX => {
+                console.log('-------------------');
+                console.log(`statusCode: ${resX.statusCode}`);
+                console.log(resX.headers);
+            
+                let body = "";
+                let response = "";
+                resX.on("data", data => {
+                  body += data;
+                });
+                resX.on("end", () => {
+                    // handle this
+                    try {
+                      response = JSON.parse(body.toString());
+                    }
+                    catch(error) {
+                      response = "ERROR";
+                    }
+                    console.log(response);
+                    resolve(response);
+                });
+            })  
+            
+            reqX.on('error', error => {
+                console.error(error)
+                reject(error);
+            })
+            reqX.end()
+
         });
     }
-
-    function getData(url, callback) {
-        options.path = url;
-        console.log('node_modules url ' + url);
-        http.json(options).then(data => {
-                //this.log(data)
-                return callback(null, data);
-            })
-            .catch(err => {
-                console.log(`problem with request: ${err.message}`);
-            });
-    }
-
 })();

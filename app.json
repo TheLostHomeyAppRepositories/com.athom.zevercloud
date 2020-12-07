@@ -1,6 +1,6 @@
 {
 	"id": "com.athom.zevercloud",
-	"version": "0.0.9",
+	"version": "0.0.21",
 	"compatibility": ">=1.5.0",
 	"sdk": 2,
 	"name": {
@@ -360,7 +360,29 @@
 							"hint": {
 								"en": "Enter the API key of your ZeverSolar plant here."
 							}
-						}
+						},
+						{
+							"id": "appkey",
+							"type": "text",
+							"label": {
+								"en": "ZeverCloud APP key"
+							},
+							"value": "...",
+							"hint": {
+								"en": "Enter the APP key of your ZeverSolar account here."
+							}
+						},
+						{
+							"id": "secret",
+							"type": "text",
+							"label": {
+								"en": "ZeverCloud Secret"
+							},
+							"value": "...",
+							"hint": {
+								"en": "Enter the Secret of your ZeverSolar account here."
+							}
+						}						
 					]
 				}
 			],

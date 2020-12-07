@@ -17,11 +17,15 @@ class plantDriver extends Homey.Driver {
                 "name": "zeversolar_plant_" + plantId,
                 "data": { 
                     "id": plantId, 
-                    "apikey": "..." 
+                    "apikey": "...", 
+                    "appkey": "...",
+                    "secret": "..."                    
                 },
                 "settings": {
                     "id": plantId,
-                    "apikey": "APIKey"
+                    "apikey": "APIKey",
+                    "appkey": "APPKey",
+                    "secret": "Secret"   
                 }
             }
         ]

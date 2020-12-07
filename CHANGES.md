@@ -1,5 +1,9 @@
 # zevercloud app
 
+## 0.0.20
+
+- use new api endpoint plus request your app and secret key
+
 ## 0.0.7
 
 - Support generating power from homey 3.0

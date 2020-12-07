@@ -1,7 +1,10 @@
 When you connect your ZeverSolar device to the ZeverCloud you can use this homey app for retrieving the 5 minute values of your solar panels and use this in your Homey home automation flows. Like charging your car or start your washing machine when there is enough solar power.
 
 Device
-Every ZeverSolar plant is a device which you can monitor in homey.
+Every ZeverSolar plant is a device which you can monitor in homey + it shows up on your energy tab
+
+Requesting the app and secret key from zeversolar
+Mail to service.eu@zeversolar.net to request them, the app & key fields are hidden fields on your zevercloud account
 
 Retrieving the api key of a plant
 When you go this page https://www.zevercloud.com/station/update and add step 5 you can get the api key of your plant. Use this api key as input for this app.

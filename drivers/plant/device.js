@@ -14,26 +14,35 @@ class plant extends Homey.Device {
         let settings = this.getSettings();
         let name = 'zeversolar_plant_' + this.getData().id;
         let cronName = name.toLowerCase();
-        this.log("key " + settings["apikey"]);
         this.log("device settings " +  JSON.stringify(settings));
 
-        try {
-            var task = await Homey.ManagerCron.getTask(cronName); 
-            this.log("The task exists: " + cronName);
-            this.log("task " + JSON.stringify(task));
-            task.on('run', settings => this.pollSeverCloud(settings));
-        } catch (err) {
-            if (err.code !== 404) {
-                return this.log(`other cron error: ${err.message}`);
-            }
-            this.log("The task has not been registered yet, registering task: " + cronName);
-            try {
-                task = await Homey.ManagerCron.registerTask(cronName, "*/5 * * * *", settings)
-                task.on('run', settings => this.pollSeverCloud(settings));
-            } catch (err) {
-                return this.log(`problem with registering cronjob: ${err.message}`);
-            }
-        }
+        Homey.ManagerCron.getTask(cronName)
+            .then(task => {
+                this.log("The task exists: " + cronName);
+                this.log('Unregistering cron:', cronName);
+                Homey.ManagerCron.unregisterTask(cronName, function (err, success) {});
+                Homey.ManagerCron.registerTask(cronName, "*/5 * * * *", settings)
+                .then(task => {
+                    task.on('run', settings => this.pollSeverCloud(settings));
+                })
+                .catch(err => {
+                    this.log('problem with registering cronjob: ${err.message}');
+                });            
+            })
+            .catch(err => {
+                if (err.code == 404) {
+                    this.log("The task has not been registered yet, registering task: " + cronName);
+                    Homey.ManagerCron.registerTask(cronName, "*/5 * * * *", settings)
+                        .then(task => {
+                            task.on('run', settings => this.pollSeverCloud(settings));
+                        })
+                        .catch(err => {
+                            this.log('problem with registering cronjob: ${err.message}');
+                        });
+                } else {
+                    this.log('other cron error: ${err.message}');
+                }
+            });
 
         this._flowTriggerPowerAbove100W = new Homey.FlowCardTrigger('PowerAbove100W').register();
         this._flowTriggerPowerAbove500W = new Homey.FlowCardTrigger('PowerAbove500W').register();
@@ -125,12 +134,52 @@ class plant extends Homey.Device {
                         this.log('APIKey changed to ' + newSettingsObj.apikey);
                         settings.apikey = newSettingsObj.apikey;
                         break;
-
+                    case 'appkey':
+                        this.log('APPKey changed to ' + newSettingsObj.appkey);
+                        settings.appkey = newSettingsObj.appkey;
+                        break;
+                    case 'secret':
+                        this.log('Secret changed to ' + newSettingsObj.secret);
+                        settings.secret = newSettingsObj.secret;
+                        break;
                     default:
                         this.log("Key not matched: " + i);
                         break;
                 }
             }
+
+            let name = 'zeversolar_plant_' + this.getData().id;
+            let cronName = name.toLowerCase();
+            this.log("device settings " +  JSON.stringify(settings));
+    
+            Homey.ManagerCron.getTask(cronName)
+                .then(task => {
+                    this.log("The task exists: " + cronName);
+                    this.log('Unregistering cron:', cronName);
+                    Homey.ManagerCron.unregisterTask(cronName, function (err, success) {});
+                    Homey.ManagerCron.registerTask(cronName, "*/5 * * * *", settings)
+                    .then(task => {
+                        task.on('run', settings => this.pollSeverCloud(settings));
+                    })
+                    .catch(err => {
+                        this.log('problem with registering cronjob: ${err.message}');
+                    });            
+                })
+                .catch(err => {
+                    if (err.code == 404) {
+                        this.log("The task has not been registered yet, registering task: " + cronName);
+                        Homey.ManagerCron.registerTask(cronName, "*/5 * * * *", settings)
+                            .then(task => {
+                                task.on('run', settings => this.pollSeverCloud(settings));
+                            })
+                            .catch(err => {
+                                this.log('problem with registering cronjob: ${err.message}');
+                            });
+                    } else {
+                        this.log('other cron error: ${err.message}');
+                    }
+                });
+
             this.pollSeverCloud(settings);
             callback(null, true)
         } catch (error) {
@@ -151,63 +200,69 @@ class plant extends Homey.Device {
             this.log("refresh now " + currentdate);
     
             this.log("Received data");
-            this.log("object "+ JSON.stringify(data));
-            var ludtdate = data.ludt; 
-            this.log("update date "+ ludtdate);
-            this.setCapabilityValue('latest_upload_date', ludtdate);
 
-            var power = 0
-            if ( data.Power.unit == "kW" ) {
-                power =  (data.Power.value * 1000);
-            } else {
-                power =  data.Power.value;
-            }
+            if (data != "ERROR"){
 
-            var etotal = 0
-            if ( data["E-Total"].unit == "MWh" ) {
-                etotal =  (data["E-Total"].value * 1000);
-            } else {
-                etotal =  data["E-Total"].value;
-            }
+                this.log("object "+ JSON.stringify(data));
+                var ludtdate = data.ludt; 
+                this.log("update date "+ ludtdate);
+                this.setCapabilityValue('latest_upload_date', ludtdate);
 
-            var etotalMonth = 0
-            if ( data["E-Month"].unit == "MWh" ) {
-                etotalMonth =  (data["E-Month"].value * 1000);
-            } else {
-                etotalMonth =  data["E-Month"].value;
-            }
+                var power = 0
+                if ( data.Power.unit == "kW" ) {
+                    power =  (data.Power.value * 1000);
+                } else {
+                    power =  data.Power.value;
+                }
 
-            this.setCapabilityValue('measure_power', power);
+                var etotal = 0
+                if ( data["E-Total"].unit == "MWh" ) {
+                    etotal =  (data["E-Total"].value * 1000);
+                } else {
+                    etotal =  data["E-Total"].value;
+                }
 
-            var val = data["E-Today"].value
-            this.setCapabilityValue('measure_e-total-today', val);
-            this.setCapabilityValue('measure_e-total-month', etotalMonth);
-            this.setCapabilityValue('measure_e-total', etotal);
+                var etotalMonth = 0
+                if ( data["E-Month"].unit == "MWh" ) {
+                    etotalMonth =  (data["E-Month"].value * 1000);
+                } else {
+                    etotalMonth =  data["E-Month"].value;
+                }
 
-            let tokens = {
-                "power": power,
-                "plant": this.getData().id.toLowerCase()
-            };
+                this.setCapabilityValue('measure_power', power);
 
-            if ( this.getCapabilityValue('measure_power') < 100 
-                 && power > 100 
-                 && power < 500 ) {
-                this.triggerPowerAbove100WFlow(tokens);
-            } else if ( this.getCapabilityValue('measure_power') < 500 
-                        && power > 500 
-                        && power < 1000 ) {
-                this.triggerPowerAbove500WFlow(tokens);
-            } else if ( this.getCapabilityValue('measure_power') < 1000 
-                        && power > 1000 ) {
-                this.triggerPowerAbove1000WFlow(tokens);
-            }
+                var val = data["E-Today"].value
+                this.setCapabilityValue('measure_e-total-today', val);
+                this.setCapabilityValue('measure_e-total-month', etotalMonth);
+                this.setCapabilityValue('measure_e-total', etotal);
 
-            if (this.getCapabilityValue('measure_power') >= 25 && power < 25 ) {
-                let tokens2 = {
-                    "power": 0,
+                let tokens = {
+                    "power": power,
                     "plant": this.getData().id.toLowerCase()
                 };
-                this.triggerPowerIs0WFlow(tokens2);
+
+                if ( this.getCapabilityValue('measure_power') < 100 
+                    && power > 100 
+                    && power < 500 ) {
+                    this.triggerPowerAbove100WFlow(tokens);
+                } else if ( this.getCapabilityValue('measure_power') < 500 
+                            && power > 500 
+                            && power < 1000 ) {
+                    this.triggerPowerAbove500WFlow(tokens);
+                } else if ( this.getCapabilityValue('measure_power') < 1000 
+                            && power > 1000 ) {
+                    this.triggerPowerAbove1000WFlow(tokens);
+                }
+
+                if (this.getCapabilityValue('measure_power') >= 25 && power < 25 ) {
+                    let tokens2 = {
+                        "power": 0,
+                        "plant": this.getData().id.toLowerCase()
+                    };
+                    this.triggerPowerIs0WFlow(tokens2);
+                }
+            } else {
+                this.setCapabilityValue('latest_upload_date', "Err check your keys");
             }
         })
         .catch(error => {
