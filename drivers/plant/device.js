@@ -209,10 +209,10 @@ class plant extends Homey.Device {
                 this.setCapabilityValue('latest_upload_date', ludtdate);
 
                 var power = 0
-                if ( data.Power.unit == "kW" ) {
-                    power =  (data.Power.value * 1000);
+                if ( data.Power.unit == "W" ) {
+                    power =  data.Power.value;                    
                 } else {
-                    power =  data.Power.value;
+                    power =  (data.Power.value * 1000);
                 }
 
                 var etotal = 0

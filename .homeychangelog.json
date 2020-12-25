@@ -1,4 +1,7 @@
 {
+  "0.0.22": {
+    "en": "fix conversion for power, KW was not converted to watts"
+  },  
   "0.0.21": {
     "en": "better error handling when you don't have new key and secret, see the readme for requesting them"
   },  
