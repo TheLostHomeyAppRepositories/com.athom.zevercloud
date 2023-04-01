@@ -1,13 +1,11 @@
-'use strict';
-
 const Homey = require('homey');
 
-class MyApp extends Homey.App {
+class ZeverCloudApp extends Homey.App {
 	
-	onInit() {
+	async onInit() {
 		this.log('ZeverCloud app is running...');
 	}
 	
 }
 
-module.exports = MyApp;
+module.exports = ZeverCloudApp;

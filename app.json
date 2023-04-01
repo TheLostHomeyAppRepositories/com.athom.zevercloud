@@ -1,11 +1,15 @@
 {
 	"id": "com.athom.zevercloud",
-	"version": "0.0.22",
-	"compatibility": ">=1.5.0",
-	"sdk": 2,
+	"version": "1.0.0",
+	"compatibility": ">=5.0.0",
+	"sdk": 3,
+	"platforms": [
+		"local"
+	],	
 	"name": {
 		"en": "ZeverCloud Solar Power"
 	},
+	"brandColor": "#20df30",	
 	"description": {
 		"en": "Read solar output from zeversolar/zervercloud"
 	},

@@ -1,62 +1,38 @@
-'use strict';
 
-const zevercloud = require('../index.js');
 const Homey = require('homey');
+const zevercloud = require('../index.js');
 
 Date.prototype.timeNow = function(){ 
     return ((this.getHours() < 10)?"0":"") + ((this.getHours()>12)?(this.getHours()-12):this.getHours()) +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() + " " + ((this.getHours()>12)?('PM'):'AM');
 };
 
+const RETRY_INTERVAL = 300 * 1000;
+let timer;
+
 class plant extends Homey.Device {
 
 	async onInit() {
 		this.log('plant has been inited');
-        let settings = this.getSettings();
-        let name = 'zeversolar_plant_' + this.getData().id;
-        let cronName = name.toLowerCase();
-        this.log("device settings " +  JSON.stringify(settings));
 
-        Homey.ManagerCron.getTask(cronName)
-            .then(task => {
-                this.log("The task exists: " + cronName);
-                this.log('Unregistering cron:', cronName);
-                Homey.ManagerCron.unregisterTask(cronName, function (err, success) {});
-                Homey.ManagerCron.registerTask(cronName, "*/5 * * * *", settings)
-                .then(task => {
-                    task.on('run', settings => this.pollSeverCloud(settings));
-                })
-                .catch(err => {
-                    this.log('problem with registering cronjob: ${err.message}');
-                });            
-            })
-            .catch(err => {
-                if (err.code == 404) {
-                    this.log("The task has not been registered yet, registering task: " + cronName);
-                    Homey.ManagerCron.registerTask(cronName, "*/5 * * * *", settings)
-                        .then(task => {
-                            task.on('run', settings => this.pollSeverCloud(settings));
-                        })
-                        .catch(err => {
-                            this.log('problem with registering cronjob: ${err.message}');
-                        });
-                } else {
-                    this.log('other cron error: ${err.message}');
-                }
-            });
+        timer = this.homey.setInterval(() => {
+            // poll device state from invertor
+            this.pollSeverCloud();
+        }, RETRY_INTERVAL);
 
-        this._flowTriggerPowerAbove100W = new Homey.FlowCardTrigger('PowerAbove100W').register();
-        this._flowTriggerPowerAbove500W = new Homey.FlowCardTrigger('PowerAbove500W').register();
-        this._flowTriggerPowerAbove1000W = new Homey.FlowCardTrigger('PowerAbove1000W').register();
-        this._flowTriggerPowerIs0W = new Homey.FlowCardTrigger('PowerIs0W').register();
-        this._conditionIsGenerating = new Homey.FlowCardCondition('is_generating').register().registerRunListener((args, state) => {
+        this._flowTriggerPowerAbove100W  = this.homey.flow.getTriggerCard('PowerAbove100W');
+        this._flowTriggerPowerAbove500W  = this.homey.flow.getTriggerCard('PowerAbove500W');
+        this._flowTriggerPowerAbove1000W = this.homey.flow.getTriggerCard('PowerAbove1000W');
+        this._flowTriggerPowerIs0W       = this.homey.flow.getTriggerCard('PowerIs0W');
+
+        this._conditionIsGenerating = this.homey.flow.getConditionCard('is_generating').registerRunListener((args, state) => {
                 var result = (this.getCapabilityValue('measure_power') > 0 ) 
                 return Promise.resolve(result);
         });        
-        this._conditionGeneratingOutput = new Homey.FlowCardCondition('generating_output').register().registerRunListener((args, state) => {
+        this._conditionGeneratingOutput = this.homey.flow.getConditionCard('generating_output').registerRunListener((args, state) => {
             var result = (this.conditionIsGeneratingToString(this.getCapabilityValue('measure_power')) == args.argument_main) 
             return Promise.resolve(result);
         });
-        this.pollSeverCloud(settings);
+        this.pollSeverCloud();
 	}
 
     conditionIsGeneratingToString(power) {
@@ -109,91 +85,25 @@ class plant extends Homey.Device {
             .catch(this.error)
     }
 
-    onAdded() {
+    async onAdded() {
         let id = this.getData().id;
         this.log('device added: ', id);
     } // end onAdded
 
-    onDeleted() {
-
-        let id = this.getData().id;
-        let name = this.getName() + '_' + this.getData().id;
-        let cronName = name.toLowerCase();
-        this.log('Unregistering cron:', cronName);
-        Homey.ManagerCron.unregisterTask(cronName, function (err, success) {});
-
+    async onDeleted() {
+        this.homey.clearInterval(timer);
         this.log('device deleted:', id);
-
     } // end onDeleted
 
-    onSettings(settings, newSettingsObj, changedKeysArr, callback) {
-        try {
-            for (var i = 0; i < changedKeysArr.length; i++) {
-                switch (changedKeysArr[i]) {
-                    case 'apikey':
-                        this.log('APIKey changed to ' + newSettingsObj.apikey);
-                        settings.apikey = newSettingsObj.apikey;
-                        break;
-                    case 'appkey':
-                        this.log('APPKey changed to ' + newSettingsObj.appkey);
-                        settings.appkey = newSettingsObj.appkey;
-                        break;
-                    case 'secret':
-                        this.log('Secret changed to ' + newSettingsObj.secret);
-                        settings.secret = newSettingsObj.secret;
-                        break;
-                    default:
-                        this.log("Key not matched: " + i);
-                        break;
-                }
-            }
-
-            let name = 'zeversolar_plant_' + this.getData().id;
-            let cronName = name.toLowerCase();
-            this.log("device settings " +  JSON.stringify(settings));
-    
-            Homey.ManagerCron.getTask(cronName)
-                .then(task => {
-                    this.log("The task exists: " + cronName);
-                    this.log('Unregistering cron:', cronName);
-                    Homey.ManagerCron.unregisterTask(cronName, function (err, success) {});
-                    Homey.ManagerCron.registerTask(cronName, "*/5 * * * *", settings)
-                    .then(task => {
-                        task.on('run', settings => this.pollSeverCloud(settings));
-                    })
-                    .catch(err => {
-                        this.log('problem with registering cronjob: ${err.message}');
-                    });            
-                })
-                .catch(err => {
-                    if (err.code == 404) {
-                        this.log("The task has not been registered yet, registering task: " + cronName);
-                        Homey.ManagerCron.registerTask(cronName, "*/5 * * * *", settings)
-                            .then(task => {
-                                task.on('run', settings => this.pollSeverCloud(settings));
-                            })
-                            .catch(err => {
-                                this.log('problem with registering cronjob: ${err.message}');
-                            });
-                    } else {
-                        this.log('other cron error: ${err.message}');
-                    }
-                });
-
-            this.pollSeverCloud(settings);
-            callback(null, true)
-        } catch (error) {
-            callback(error, null)
-        }
+    async onSettings(settings, newSettingsObj, changedKeysArr) {
+        this.log("device settings " +  JSON.stringify(settings));
     }
 
-
-    pollSeverCloud(settings) {
-        this.log("pollSeverCloud settings " +  JSON.stringify(settings));
-        // let settings2 = this.getSettings();
+    pollSeverCloud() {
+        let settings = this.getSettings();
+        this.log("device settings " +  JSON.stringify(settings));
         let name2 = 'zeversolar_plant_' + this.getData().id;
         this.log("pollSeverCloud device name " +  name2);
-        // this.log("pollSeverCloud device settings " +  JSON.stringify(settings2));
 
         zevercloud.getTodayData(settings).then(data => {
             var currentdate =new Date().timeNow();
@@ -269,7 +179,6 @@ class plant extends Homey.Device {
             this.log(error);
         });
     }
-
 }
 
 module.exports = plant;

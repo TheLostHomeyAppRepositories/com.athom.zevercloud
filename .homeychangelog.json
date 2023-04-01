@@ -1,4 +1,7 @@
 {
+  "1.0.0": {
+    "en": "sdkv3"
+  },    
   "0.0.22": {
     "en": "fix conversion for power, KW was not converted to watts"
   },  
