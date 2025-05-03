@@ -1,6 +1,6 @@
 {
 	"id": "com.athom.zevercloud",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"compatibility": ">=5.0.0",
 	"sdk": 3,
 	"platforms": [
@@ -99,6 +99,29 @@
 			"decimals": 2,
 			"icon": "/assets/images/etoday.svg"
 		},
+		"meter_power": {
+			"type": "number",
+			"title": {
+			  "en": "Total Yield",
+			  "nl": "Totale opbrengst",
+			  "de": "Gesamtertrag"
+			},
+			"decimals": 2,
+			"units": {
+			  "en": "kWh"
+			},
+			"desc": {
+			  "en": "Energy usage in kilowatt-hour (kWh)",
+			  "nl": "Energie verbruik in kilowattuur (kWh)",
+			  "de": "Verbrauchte Energie in Kilowattstunden (kWh)"
+			},
+			"chartType": "spline",
+			"insights": true,
+			"getable": true,
+			"setable": false,
+			"uiComponent": "sensor",
+			"icon": "/assets/images/etoday.svg"
+		},		
 		"latest_upload_date": {
 			"type": "string",
 			"title": {
