@@ -33,9 +33,9 @@ class plant extends Homey.Device {
             return Promise.resolve(result);
         });
 
-        if (this.hasCapability('meter_power') === false) {
-            await this.addCapability('meter_power');
-          }
+        if (this.hasCapability('meter_power') === true) {
+            await this.removeCapability('meter_power');
+        }
 
         this.pollSeverCloud();
 	}
@@ -150,7 +150,7 @@ class plant extends Homey.Device {
                 this.setCapabilityValue('measure_e-total-today', val);
                 this.setCapabilityValue('measure_e-total-month', etotalMonth);
                 this.setCapabilityValue('measure_e-total', etotal);
-                this.setCapabilityValue('meter_power', etotal);
+               
 
                 let tokens = {
                     "power": power,
